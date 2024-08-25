@@ -1,11 +1,11 @@
 package config
 
 import (
-	"log"
-	"os"
+	// "log"
+	// "os"
 	"time"
 
-	"github.com/ilyakaznacheev/cleanenv"
+	// "github.com/ilyakaznacheev/cleanenv"
 )
 
 
@@ -25,23 +25,38 @@ type HTTPServer struct {
 
 func MustLoad() *Config {
     // Получаем путь до конфиг-файла из env-переменной CONFIG_PATH
-    configPath := os.Getenv("SERVER_CONFIG_PATH")
-    if configPath == "" {
-        log.Fatal("CONFIG_PATH environment variable is not set")
-    }
+    // configPath := os.Getenv("SERVER_CONFIG_PATH")
+    // if configPath == "" {
+    //     log.Fatal("CONFIG_PATH environment variable is not set")
+    // }
 
     // Проверяем существование конфиг-файла
-    if _, err := os.Stat(configPath); err != nil {
-        log.Fatalf("error opening config file: %s", err)
+    // if _, err := os.Stat(configPath); err != nil {
+    //     log.Fatalf("error opening config file: %s", err)
+    // }
+
+    timeout, _ := time.ParseDuration("4s")
+    iddleTimeout, _ := time.ParseDuration("30s")
+
+    var server HTTPServer = HTTPServer {
+        Address: "0.0.0.0:80",
+        Timeout: timeout,
+        IdleTimeout: iddleTimeout,
+        User: "my_user",
+        Password: "my_pass",
     }
 
-    var cfg Config
+    var cfg Config = Config {
+        Env: "dev",
+        StoragePath: "./storage/storage.db",
+        HTTPServer: server,
+    }
 
     // Читаем конфиг-файл и заполняем нашу структуру
-    err := cleanenv.ReadConfig(configPath, &cfg)
-    if err != nil {
-        log.Fatalf("error reading config file: %s", err)
-    }
+    // err := cleanenv.ReadConfig(configPath, &cfg)
+    // if err != nil {
+    //     log.Fatalf("error reading config file: %s", err)
+    // }
 
     return &cfg
 }

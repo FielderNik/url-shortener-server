@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"server/internal/config"
+	"server/internal/http_server/handlers/url/check"
 	"server/internal/http_server/handlers/url/redirect"
 	"server/internal/http_server/handlers/url/save"
 	"server/internal/http_server/middleware/logger"
@@ -58,6 +59,8 @@ func main() {
 
     
     router.Get("/{alias}", redirect.New(log, storage))
+
+    router.Get("/check", check.New(log))
 
 
     server := &http.Server {
